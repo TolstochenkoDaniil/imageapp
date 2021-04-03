@@ -1,14 +1,14 @@
   
-<!-- templates/registration/login.html -->
+<!-- templates/imagemanager/path_form.html -->
 {% extends 'base.html' %}
 
 {% block title %}Image path{% endblock %}
 
 {% block content %}
-<a href="{% url 'home'%}">Назад к списку</a>
+<a href="{% url '/'%}">Назад к списку</a>
 <div class="form-container">
-    <form method="post">
-        {{ form }}
+    <form method="post" enctype='multipart/form-data'>
+        {{ form.as_p }}
     <button type="submit" class="btn btn-success">Отправить</button>
     </form>
 </div>
