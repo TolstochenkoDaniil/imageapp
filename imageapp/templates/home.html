@@ -1,0 +1,19 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h2>Список изображений</h2>
+    
+    {% if images %}
+        <ul>
+            {% for image in images %}
+                <li><a class="image-link" href="#"></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нет доступных изображений</p>
+        <a href="#">Добавить изображение</a>
+    {% endif %}
+{% endblock %}
