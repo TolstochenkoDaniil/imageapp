@@ -1,0 +1,16 @@
+  
+<!-- templates/registration/login.html -->
+{% extends 'base.html' %}
+
+{% block title %}Image path{% endblock %}
+
+{% block content %}
+<a href="{% url 'home'%}">Назад к списку</a>
+<div class="form-container">
+    <form method="post">
+        {{ form }}
+    <button type="submit" class="btn btn-success">Отправить</button>
+    </form>
+</div>
+
+{% endblock %}
