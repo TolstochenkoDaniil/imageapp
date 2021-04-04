@@ -25,7 +25,7 @@ class ImageEditView(UpdateView):
     form_class = ImageEditForm
     model = Image
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.resized_image = None
         super().__init__(*args, **kwargs)
 
@@ -33,16 +33,13 @@ class ImageEditView(UpdateView):
         return self.request.path
 
     def form_valid(self, form: Type[ImageEditForm]) -> HttpResponse:
+        height = form.cleaned_data.get('height', 0)
+        width = form.cleaned_data.get('width', 0)
+
         image = self.get_object()
-        self.resized_image = image.get_resized_image(self.request.data.heigth, self.request.data.width)
+        image.resize(height, width)
 
         return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["resized_image"] = self.resized_image
-
-        return context
 
 
 class ImageListView(ListView):

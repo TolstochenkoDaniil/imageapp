@@ -1,7 +1,7 @@
 import pytest
 from io import BytesIO
 from PIL import Image as img
-from pathlib import Path
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
@@ -22,7 +22,11 @@ def fake_image():
 
 
 @pytest.mark.parametrize(
-    'size', [((200,200))]
+    'size', [
+        ((200,200)),
+        ((200, 0)),
+        ((0, 200))
+    ]
 )
 def test_model_resize(fake_image, size, tmp_path):
     settings.MEDIA_ROOT = tmp_path
@@ -30,20 +34,17 @@ def test_model_resize(fake_image, size, tmp_path):
     image.image = fake_image
     image.save()
 
-    resized_image = image.resize(*size)
+    image.resize(*size)
 
-    assert resized_image.size == size
+    assert image.resized_image.height == 200
+    assert image.resized_image.width == 200
 
 
-@pytest.mark.parametrize(
-    'size', [((200,200))]
-)
-def test_model_get_resized_image(fake_image, size, tmp_path):
+def test_upload_image_with_url(tmp_path):
     settings.MEDIA_ROOT = tmp_path
     image = Image()
-    image.image = fake_image
+    image.url = 'https://cdn.vox-cdn.com/thumbor/FOIV1c1Eq9Y1HQq-Sn1RgReLp0E=/0x0:735x500/920x613/filters:focal(310x192:426x308):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/66727168/image.0.png'
+
     image.save()
 
-    image_uri = image.get_resized_image(*size)
-
-    assert isinstance(image_uri, str) == True
+    assert image.image.name is not None

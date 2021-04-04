@@ -1,34 +1,56 @@
 import os
-import base64
 from io import BytesIO
 from PIL import Image as img
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files import File
 from django.db import models
+import requests
 
 
 class Image(models.Model):
     ''''''
-    image = models.ImageField(upload_to='images', verbose_name='Файл', null=True, blank=True)
+    image = models.ImageField(
+        upload_to='images',
+        verbose_name='Файл',
+        null=True,
+        blank=True
+    )
+    resized_image = models.ImageField(
+        upload_to='resized_images',
+        verbose_name='Отформатированное изображение',
+        null=True,
+        blank=True
+    )
+    url = models.URLField(verbose_name='Ссылка', null=True, blank=True)
 
-    def get_resized_image(self, heigth, width):
-        data = BytesIO()
-        extension = os.path.splitext(self.image.name)[1].replace(".", "")
+    def save(self, *args, **kwargs):
+        if self.url:
+            response = requests.get(self.url)
+            self.image = SimpleUploadedFile(name='', content=response.content)
 
-        image = self.resize(heigth, width)
-        image.save(data, extension)
+        super().save(*args, **kwargs)
 
-        encoded_image = base64.b64encode(data.getvalue())
-        decoded_image = encoded_image.decode('utf-8')
-
-        return f"data:image/{extension};base64,{decoded_image}"
-
-    def resize(self, heigth, width):
+    def resize(self, height, width):
         ''''''
-        size = (heigth, width)
+        if not height:
+            height = width
+
+        if not width:
+            width = height
+
+        size = (height, width)
+        buffer = BytesIO()
+        extention = os.path.splitext(self.image.name)[1].replace(".", "")
+
+        if extention.upper() == 'JPG':
+            extention = 'JPEG'
 
         image = img.open(self.image.path)
         image.thumbnail(size, img.ANTIALIAS)
+        image.save(buffer, extention)
 
-        return image
+        self.resized_image.save(os.path.basename(self.image.name), File(buffer), save=False)
+        buffer.close()
 
     @property
     def filename(self):

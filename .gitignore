@@ -2,8 +2,10 @@ env/
 .vscode/
 __pycache__/
 migrations/
+.pytest*
+media/
 
 *.exe
-*.sqlite
+*.sqlite*
 .env*
 

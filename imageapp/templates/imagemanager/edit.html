@@ -13,14 +13,12 @@
     <button type="submit" class="btn btn-success">Отправить</button>
     </form>
 </div>
-{% if resized_image %}
-    <div class="image-container">
-        <img src="{{ resized_image }}"/>
-    </div>
-{% else %}
-    <div class="image-container">
+<div class="image-container">
+    {% if image.resized_image %}
+        <img src="{{ image.resized_image.url }}"/>
+    {% else %}
         <img src="{{ image.image.url }}"/>
-    </div>
-{% endif %}
+    {% endif %}
+</div>
 
 {% endblock %}
