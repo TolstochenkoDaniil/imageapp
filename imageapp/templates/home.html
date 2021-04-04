@@ -6,14 +6,14 @@
 {% block content %}
     <h2>Список изображений</h2>
     
-    {% if images %}
-        <ul>
-            {% for image in images %}
-                <li><a class="image-link" href="#"></li>
+    {% if object_list %}
+        <ul style="list-style: none;">
+            {% for image in object_list %}
+                <li><a class="image-link" href="{% url 'edit_image' image.id %}">{{image.filename}}</li>
             {% endfor %}
         </ul>
     {% else %}
         <p>Нет доступных изображений</p>
-        <a href="{% url 'image_upload' %}">Добавить изображение</a>
     {% endif %}
+    <a href="{% url 'upload_image' %}">Добавить изображение</a>
 {% endblock %}
