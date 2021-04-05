@@ -5,8 +5,6 @@
 ## Установка
 
 ```sh
-git init
-
 git clone https://github.com/TolstochenkoDaniil/imageapp.git .
 ```
 
@@ -24,6 +22,8 @@ pip install -r requirements.txt
 
 ```sh
 cd imageapp
+
+touch imageapp/.env
 
 python manage.py makemigrations
 
