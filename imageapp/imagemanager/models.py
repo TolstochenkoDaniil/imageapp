@@ -1,14 +1,23 @@
 import os
+import requests
 from io import BytesIO
 from PIL import Image as img
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files import File
+from django.core.files.base import ContentFile
 from django.db import models
-import requests
 
 
 class Image(models.Model):
     ''''''
+    IMAGE_TYPES = {
+        '.jpg': 'JPEG',
+        '.jpeg': 'JPEG',
+        '.gif': 'GIF',
+        '.png': 'PNG'
+    }
+
     image = models.ImageField(
         upload_to='images',
         verbose_name='Файл',
@@ -40,16 +49,15 @@ class Image(models.Model):
 
         size = (height, width)
         buffer = BytesIO()
-        extention = os.path.splitext(self.image.name)[1].replace(".", "")
+        image_name, image_extension = os.path.splitext(self.image.name)
 
-        if extention.upper() == 'JPG':
-            extention = 'JPEG'
+        image_type = self.IMAGE_TYPES.get(image_extension.lower())
 
         image = img.open(self.image.path)
         image.thumbnail(size, img.ANTIALIAS)
-        image.save(buffer, extention)
+        image.save(buffer, image_type)
 
-        self.resized_image.save(os.path.basename(self.image.name), File(buffer), save=False)
+        self.resized_image.save(image_name, File(buffer), save=True)
         buffer.close()
 
     @property

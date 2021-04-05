@@ -38,6 +38,8 @@ def test_model_resize(fake_image, size, tmp_path):
 
     assert image.resized_image.height == 200
     assert image.resized_image.width == 200
+    
+    assert image.resized_image.url is not None
 
 
 def test_upload_image_with_url(tmp_path):
