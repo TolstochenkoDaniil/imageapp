@@ -4,28 +4,36 @@
 
 ## Установка
 
-`git init`
+git init
 
-`git clone <https://github.com/TolstochenkoDaniil/imageapp.git> .`
+git clone <https://github.com/TolstochenkoDaniil/imageapp.git> .
 
 Настройка окружения
-> `python -m venv env`
->
-> `source env/scripts/activate`
->
-> `pip install -r requirements.txt`
+
+```sh
+python -m venv env
+
+source env/scripts/activate
+
+pip install -r requirements.txt
+```
 
 Запуск проекта
-> `cd imageapp`
->
-> `python manage.py makemigrations`
->
-> `python manage.py migrate --run-syncdb`
->
-> `python manage.py runserver 7000`
+
+```sh
+cd imageapp
+
+python manage.py makemigrations
+
+python manage.py migrate --run-syncdb
+
+python manage.py runserver 7000
+```
 
 ## Тесты
 
 Запуск всех тестов
 
-`py.test`
+```sh
+py.test
+```
