@@ -62,17 +62,17 @@ class Image(models.Model):
             )
 
     def _get_new_size(self, height: int, width: int) -> tuple:
-        width_ratio = width / self.image.width
         height_ratio = height / self.image.height
+        width_ratio = width / self.image.width
 
         if width_ratio < height_ratio:
-            new_width = round(height_ratio * self.image.width)
             new_height = height
+            new_width = round(height_ratio * self.image.width)
         else:
-            new_width = width
             new_height = round(width_ratio * self.image.height)
+            new_width = width
 
-        return (new_width, new_height)
+        return (new_height, new_width)
 
     @property
     def filename(self) -> str:
