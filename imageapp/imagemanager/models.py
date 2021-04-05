@@ -1,7 +1,7 @@
 import os
 import requests
 from io import BytesIO
-from PIL import Image as img
+from PIL import Image as PilImage
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
@@ -14,7 +14,6 @@ class Image(models.Model):
         '.gif': 'GIF',
         '.png': 'PNG'
     }
-
     image = models.ImageField(
         upload_to='images',
         verbose_name='Файл',
@@ -45,20 +44,14 @@ class Image(models.Model):
         super().save(*args, **kwargs)
 
     def resize(self, height: int, width: int) -> None:
-        if not height:
-            height = width
-
-        if not width:
-            width = height
-
-        size = (height, width)
+        size = self._get_new_size(height, width)
 
         with BytesIO() as buffer:
             image_name, image_extension = os.path.splitext(self.image.name)
             image_type = self.IMAGE_TYPES.get(image_extension.lower())
 
-            image = img.open(self.image.path)
-            image.thumbnail(size, img.ANTIALIAS)
+            image = PilImage.open(self.image.path)
+            image = image.resize(size, PilImage.ANTIALIAS)
             image.save(buffer, image_type)
             buffer.seek(0)
 
@@ -67,6 +60,19 @@ class Image(models.Model):
                 content=buffer.read(),
                 content_type=image_type
             )
+
+    def _get_new_size(self, height: int, width: int) -> tuple:
+        width_ratio = width / self.image.width
+        height_ratio = height / self.image.height
+
+        if width_ratio < height_ratio:
+            new_width = round(height_ratio * self.image.width)
+            new_height = height
+        else:
+            new_width = width
+            new_height = round(width_ratio * self.image.height)
+
+        return (new_width, new_height)
 
     @property
     def filename(self) -> str:

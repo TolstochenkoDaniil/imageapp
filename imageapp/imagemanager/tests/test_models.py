@@ -21,6 +21,15 @@ def fake_image():
     return SimpleUploadedFile(name='test.png', content=image_file.read())
 
 
+def test_image_model_get_new_size(fake_image, tmp_path):
+    settings.MEDIA_ROOT = tmp_path
+    image = Image()
+    image.image = fake_image
+
+    size = image._get_new_size(200, 200)
+
+    assert size == (200, 200)
+
 @pytest.mark.parametrize(
     'size', [
         ((200,200)),
@@ -38,7 +47,7 @@ def test_model_resize(fake_image, size, tmp_path):
 
     assert image.resized_image.height == 200
     assert image.resized_image.width == 200
-    
+
     assert image.resized_image.url is not None
 
 
