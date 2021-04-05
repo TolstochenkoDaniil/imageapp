@@ -4,9 +4,11 @@
 
 ## Установка
 
+```sh
 git init
 
-git clone <https://github.com/TolstochenkoDaniil/imageapp.git> .
+git clone https://github.com/TolstochenkoDaniil/imageapp.git .
+```
 
 Настройка окружения
 
