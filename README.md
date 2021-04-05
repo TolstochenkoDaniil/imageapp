@@ -12,4 +12,4 @@ git clone <https://github.com/TolstochenkoDaniil/imageapp.git>
 
 - `python manage.py makemigrations`
 
-- `python manage.py migrate`
+- `python manage.py migrate --run-syncdb`
