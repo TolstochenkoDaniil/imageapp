@@ -14,7 +14,7 @@ pytestmark = [pytest.mark.django_db]
 @pytest.fixture
 def fake_image():
     image_file = BytesIO()
-    image = img.new('RGBA', size=(500,500), color=(256,0,0))
+    image = img.new('RGBA', size=(400,500), color=(256,0,0))
     image.save(image_file, 'png')
     image_file.seek(0)
 
@@ -22,9 +22,9 @@ def fake_image():
 
 @pytest.mark.parametrize(
     'size, expected', [
-        ((200, 200), (200, 200)),
-        ((300, 400), (400, 400)),
-        ((800, 600), (800, 800))
+        ((200, 200), (160, 200)),
+        ((300, 400), (300, 375)),
+        ((800, 600), (480, 600))
     ]
 )
 def test_image_model_get_new_size(size, expected, fake_image, tmp_path):
@@ -50,9 +50,6 @@ def test_model_resize(fake_image, size, tmp_path):
     image.save()
 
     image.resize(*size)
-
-    assert image.resized_image.height == 200
-    assert image.resized_image.width == 200
 
     assert image.resized_image.url is not None
 

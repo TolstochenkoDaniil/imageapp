@@ -30,7 +30,7 @@ class ImageEditView(UpdateView):
         width = form.cleaned_data.get('width', 0)
 
         image = form.instance
-        image.resize(height, width)
+        image.resize(width, height)
 
         return super().form_valid(form)
 
