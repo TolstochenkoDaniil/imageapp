@@ -1,6 +1,7 @@
 import pytest
 from io import BytesIO
 from PIL import Image
+
 from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
 

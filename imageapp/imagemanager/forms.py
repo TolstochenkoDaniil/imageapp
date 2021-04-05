@@ -4,7 +4,6 @@ from imagemanager.models import Image
 
 
 class ImageUploadForm(forms.ModelForm):
-    ''''''
     class Meta:
         model = Image
         fields = ('url', 'image')
@@ -26,7 +25,6 @@ class ImageUploadForm(forms.ModelForm):
 
 
 class ImageEditForm(forms.ModelForm):
-    ''''''
     width = forms.IntegerField(label='Ширина', required=False)
     height = forms.IntegerField(label='Высота', required=False)
 
