@@ -9,7 +9,7 @@ class ImageUploadForm(forms.ModelForm):
         fields = ('url', 'image')
         exclude = ('resized_image',)
 
-    def clean(self):
+    def clean(self) -> dict:
         self.cleaned_data = super().clean()
 
         url = self.cleaned_data.get('url')
@@ -32,7 +32,7 @@ class ImageEditForm(forms.ModelForm):
         model = Image
         fields = ('width', 'height')
 
-    def clean(self):
+    def clean(self) -> dict:
         self.cleaned_data = super().clean()
 
         width = self.cleaned_data.get('width')

@@ -29,7 +29,7 @@ class Image(models.Model):
     )
     url = models.URLField(verbose_name='Ссылка', max_length=256, null=True, blank=True)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if self.url and not self.image:
             image_name, image_extension = os.path.splitext(self.url)
             image_type = self.IMAGE_TYPES.get(image_extension.lower())
@@ -44,7 +44,7 @@ class Image(models.Model):
 
         super().save(*args, **kwargs)
 
-    def resize(self, height, width):
+    def resize(self, height: int, width: int) -> None:
         if not height:
             height = width
 
@@ -69,5 +69,5 @@ class Image(models.Model):
             )
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         return os.path.basename(self.image.name)

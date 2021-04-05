@@ -22,10 +22,6 @@ class ImageEditView(UpdateView):
     form_class = ImageEditForm
     model = Image
 
-    def __init__(self, *args, **kwargs) -> None:
-        self.resized_image = None
-        super().__init__(*args, **kwargs)
-
     def get_success_url(self) -> str:
         return self.request.path
 
@@ -35,7 +31,6 @@ class ImageEditView(UpdateView):
 
         image = form.instance
         image.resize(height, width)
-        print(image.resized_image.url)
 
         return super().form_valid(form)
 
