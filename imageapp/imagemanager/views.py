@@ -9,7 +9,6 @@ from imagemanager.forms import ImageUploadForm, ImageEditForm
 
 
 class ImageUploadView(CreateView):
-    ''''''
     template_name = 'imagemanager/upload.html'
     form_class = ImageUploadForm
     model = Image
@@ -19,7 +18,6 @@ class ImageUploadView(CreateView):
 
 
 class ImageEditView(UpdateView):
-    ''''''
     template_name = 'imagemanager/edit.html'
     form_class = ImageEditForm
     model = Image
@@ -43,5 +41,4 @@ class ImageEditView(UpdateView):
 
 
 class ImageListView(ListView):
-    ''''''
     model = Image

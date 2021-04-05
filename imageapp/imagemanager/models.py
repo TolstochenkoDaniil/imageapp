@@ -4,12 +4,10 @@ from io import BytesIO
 from PIL import Image as img
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.files import File
 from django.db import models
 
 
 class Image(models.Model):
-    ''''''
     IMAGE_TYPES = {
         '.jpg': 'JPEG',
         '.jpeg': 'JPEG',
@@ -29,17 +27,24 @@ class Image(models.Model):
         null=True,
         blank=True
     )
-    url = models.URLField(verbose_name='Ссылка', null=True, blank=True)
+    url = models.URLField(verbose_name='Ссылка', max_length=256, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.url:
+        if self.url and not self.image:
+            image_name, image_extension = os.path.splitext(self.url)
+            image_type = self.IMAGE_TYPES.get(image_extension.lower())
+
             response = requests.get(self.url)
-            self.image = SimpleUploadedFile(name='', content=response.content)
+
+            self.image = SimpleUploadedFile(
+                name=f'{image_name}{image_extension}',
+                content=response.content,
+                content_type=image_type
+            )
 
         super().save(*args, **kwargs)
 
     def resize(self, height, width):
-        ''''''
         if not height:
             height = width
 
@@ -50,14 +55,13 @@ class Image(models.Model):
 
         with BytesIO() as buffer:
             image_name, image_extension = os.path.splitext(self.image.name)
-
             image_type = self.IMAGE_TYPES.get(image_extension.lower())
 
             image = img.open(self.image.path)
             image.thumbnail(size, img.ANTIALIAS)
             image.save(buffer, image_type)
             buffer.seek(0)
-            
+
             self.resized_image = SimpleUploadedFile(
                 name=f'{image_name}_resized{image_extension}',
                 content=buffer.read(),

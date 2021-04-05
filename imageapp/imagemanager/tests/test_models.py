@@ -49,4 +49,4 @@ def test_upload_image_with_url(tmp_path):
 
     image.save()
 
-    assert image.image.name is not None
+    assert image.image.url is not None
