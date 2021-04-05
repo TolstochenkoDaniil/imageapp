@@ -10,6 +10,8 @@ git clone https://github.com/TolstochenkoDaniil/imageapp.git .
 
 Настройка окружения
 
+> python --version # Python 3.9.0
+
 ```sh
 python -m venv env
 
