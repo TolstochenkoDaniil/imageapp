@@ -1,15 +1,31 @@
-# Setup
+# Описание
 
-git clone <https://github.com/TolstochenkoDaniil/imageapp.git>
+Тестовое задание
 
-- `python -m venv env`
+## Установка
 
-- `source env/scripts/activate`
+`git init`
 
-- `pip install -r requirements.txt`
+`git clone <https://github.com/TolstochenkoDaniil/imageapp.git> .`
 
-- `cd imageapp`
+Настройка окружения
+> `python -m venv env`
+>
+> `source env/scripts/activate`
+>
+> `pip install -r requirements.txt`
 
-- `python manage.py makemigrations`
+Запуск проекта
+> `cd imageapp`
+>
+> `python manage.py makemigrations`
+>
+> `python manage.py migrate --run-syncdb`
+>
+> `python manage.py runserver 7000`
 
-- `python manage.py migrate --run-syncdb`
+## Тесты
+
+Запуск всех тестов
+
+`py.test`
