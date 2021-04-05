@@ -5,7 +5,6 @@ from PIL import Image as img
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files import File
-from django.core.files.base import ContentFile
 from django.db import models
 
 
@@ -25,7 +24,7 @@ class Image(models.Model):
         blank=True
     )
     resized_image = models.ImageField(
-        upload_to='resized_images',
+        upload_to='images',
         verbose_name='Отформатированное изображение',
         null=True,
         blank=True
@@ -48,17 +47,22 @@ class Image(models.Model):
             width = height
 
         size = (height, width)
-        buffer = BytesIO()
-        image_name, image_extension = os.path.splitext(self.image.name)
 
-        image_type = self.IMAGE_TYPES.get(image_extension.lower())
+        with BytesIO() as buffer:
+            image_name, image_extension = os.path.splitext(self.image.name)
 
-        image = img.open(self.image.path)
-        image.thumbnail(size, img.ANTIALIAS)
-        image.save(buffer, image_type)
+            image_type = self.IMAGE_TYPES.get(image_extension.lower())
 
-        self.resized_image.save(image_name, File(buffer), save=True)
-        buffer.close()
+            image = img.open(self.image.path)
+            image.thumbnail(size, img.ANTIALIAS)
+            image.save(buffer, image_type)
+            buffer.seek(0)
+            
+            self.resized_image = SimpleUploadedFile(
+                name=f'{image_name}_resized{image_extension}',
+                content=buffer.read(),
+                content_type=image_type
+            )
 
     @property
     def filename(self):

@@ -1,4 +1,3 @@
-import types
 from typing import Type
 from django.http.response import HttpResponse
 from django.urls import reverse
@@ -36,8 +35,9 @@ class ImageEditView(UpdateView):
         height = form.cleaned_data.get('height', 0)
         width = form.cleaned_data.get('width', 0)
 
-        image = self.get_object()
+        image = form.instance
         image.resize(height, width)
+        print(image.resized_image.url)
 
         return super().form_valid(form)
 

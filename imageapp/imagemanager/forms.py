@@ -33,7 +33,6 @@ class ImageEditForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ('width', 'height')
-        exclude = ('image',)
 
     def clean(self):
         self.cleaned_data = super().clean()
